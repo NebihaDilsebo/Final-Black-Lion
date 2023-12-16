@@ -29,7 +29,7 @@ app.get('/', async (req, res) => {
     try {
         const products = await collection.find().toArray();
         // Render the 'index' view and pass the products as a variable
-        res.render('index', { products });
+	    res.render('index', { products, popperVersion: '2.11.6' });
     } catch (error) {
         console.error('Error fetching products from MongoDB:', error);
         res.status(500).send('Internal Server Error');

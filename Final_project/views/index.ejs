@@ -23,13 +23,13 @@
                 <a class="nav-link" href="/">Home</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/about-us">About Us</a>
+                <a class="nav-link" href="#about-us" data-bs-target="#about-us">About Us</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/contact-us">Contact Us</a>
+                <a class="nav-link" href="#contact-us" data-bs-target="#contact-us">Contact Us</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/products">Products</a>
+                <a class="nav-link" href="#products" data-bs-target="#products">Products</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="/register">Register</a>
@@ -38,7 +38,7 @@
                 <a class="nav-link" href="/login">Login</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/cart">Cart</a>
+                <a class="nav-link" href="#cart"data-bs-target="#cart">Cart</a>
             </li>
         </ul>
     </div>
@@ -47,7 +47,7 @@
 <div class="container mt-5">
     <!-- The rest of your content goes here -->
 
- <!-- Welcome Section with Mobile Image -->
+<!-- Welcome Section with Mobile Image -->
     <div class="jumbotron bg-light">
         <div class="row">
             <div class="col-md-6">
@@ -55,7 +55,7 @@
                 <p class="lead">Explore our latest products and enjoy a seamless shopping experience.</p>
             </div>
             <div class="col-md-6">
-                <img src="path/to/mobile-image.jpg" alt="Mobile" class="img-fluid">
+                <img src="image/mobile-image.jpg" alt="Mobile" class="img-fluid">
             </div>
         </div>
     </div>
@@ -134,15 +134,28 @@
         </div>
     </div>
     <!-- End of Links Section -->
-
 </div>
 
-<!-- Add Bootstrap JS and Popper.js scripts at the end -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<!-- Add FontAwesome JS script at the end -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
+
+<script>
+    // Enable smooth scrolling
+    $(document).ready(function(){
+        $('a[data-bs-target^="#"]').on('click', function (e) {
+            e.preventDefault();
+
+            var target = this.hash;
+            var $target = $(target);
+
+            $('html, body').stop().animate({
+                'scrollTop': $target.offset().top
+            }, 900, 'swing', function () {
+                window.location.hash = target;
+            });
+        });
+    });
+</script>
+
+
 
 </body>
 </html>
