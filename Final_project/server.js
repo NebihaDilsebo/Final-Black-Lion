@@ -7,6 +7,7 @@ const { connectToDatabase, getClient } = require('./db');
 const bodyParser = require('body-parser'); // Add body-parser middlewarei
 const { MongoClient } = require('mongodb'); 
 const PORT = process.env.PORT || 3000;
+const mongoose = require('mongoose');
 
 app.set('view engine', 'ejs');
 
@@ -21,6 +22,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+
+// Define the product schema
+const productSchema = new mongoose.Schema({
+  // existing fields...
+  name: String,
+  price: Number,
+  // add the image field
+  image: String, // assuming you will store image URLs; if storing files, use Buffer or a file path
+});
+
+// Create the Product model
+const Product = mongoose.model('Product', productSchema);
 
 app.get('/', async (req, res) => {
     const db = getClient().db('Black_lion_store');
@@ -36,6 +50,14 @@ app.get('/', async (req, res) => {
     }
 });
 
+app.get('/', (req, res) => {
+  // Retrieve image data from MongoDB (replace this with your own MongoDB logic)
+  const imageData = retrieveImageDataFromMongoDB();
+
+  // Render the HTML page and pass image data
+  res.render('welcome', { imageData });
+});
+
 // Create a register page (GET request)
 app.get('/register', (req, res) => {
   res.render('register'); // Assuming you have a 'register' view
@@ -46,44 +68,66 @@ app.get('/login', (req, res) => {
   res.render('login');
 });
 
+// Define the User schema
+const userSchema = new mongoose.Schema({
+  username: String,
+  password: String,
+});
+
+const User = mongoose.model('User', userSchema);
+
+// Your hashPassword function
+const hashPassword = async (password) => {
+  // Generate a salt and hash the password
+  const saltRounds = 10; // You can adjust this value based on your security requirements
+  const hashedPassword = await bcrypt.hash(password, saltRounds);
+  return hashedPassword;
+};
+
 app.post('/api/login', async (req, res) => {
   const username = req.body.username;
-  const password = req.body.password;
+	const password = req.body.password;
+
+	console.log('Username:', username);
+console.log('Password:', password);
 	let client;
   try {
-    // Connect to MongoDB
-	  const client = new MongoClient(process.env.MONGODB_URI, { useUnifiedTopology: true });
+	  // Connect to MongoDB
+	  const client = new MongoClient(process.env.MONGODB_URI);
+  // Connect to MongoDBawait client.connect();
 	  await client.connect();
 
     // Access the users collection
-    const collection = client.db().collection('users');
+    const collection = client.db().collection('user');
+
+console.log('Successfully accessed the users collection');
+	  // Hash the provided password
+    const hashedPassword = await hashPassword(password);
+
 
     // Perform authentication logic against MongoDB
     const user = await collection.findOne({ username, password });
 
-    if (user) {
+	  console.log('Found user:', JSON.stringify(user));
+
+if (user) {
       // Redirect to home page with user profile
-      res.render('index', { user }); // You can pass additional data in the URL or use sessions for more advanced scenarios
+      res.render('profile', { user }); // You can pass additional data in the URL or use sessions for more advanced scenarios
     } else {
       // If authentication fails, render the login page again with an error message
       res.render('login', { error: 'Invalid username or password' });
     }
+
   } catch (error) {
-    console.error('Error connecting to MongoDB:', error);
-    res.status(500).send('Internal Server Error');
+        console.error('Error connecting to MongoDB:', error);
+	    res.render('login', { error: 'Internal Server Error' });
+        res.status(500).send('Internal Server Error');
   } finally {
 	  if (client) {
     // Close the MongoDB connection
     await client.close();
   }
   }
-});
-
-
-// POST route for handling login form submission
-app.post('/api/login', (req, res) => {
-  const username = req.body.username; // Assuming you have an input field with name="username" in your form
-  const password = req.body.password; // Assuming you have an input field with name="password" in your form
 });
 
 // Handle registration form submission (POST request)
@@ -118,6 +162,27 @@ app.post('/api/register', async (req, res) => {
   } catch (error) {
     console.error('Error registering user:', error);
     res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+app.get('/admin/add-product', (req, res) => {
+  res.render('add-product'); // Create a view for adding products
+});
+
+app.post('/admin/add-product', async (req, res) => {
+  try {
+    const { name, price, image } = req.body;
+
+    const db = getClient().db('Black_lion_store');
+    const productsCollection = db.collection('products');
+
+    // Save the product with the image URL
+    await productsCollection.insertOne({ name, price, image });
+
+    res.redirect('/'); // Redirect to the home page or product listing page
+  } catch (error) {
+    console.error('Error adding product:', error);
+    res.status(500).send('Internal Server Error');
   }
 });
 

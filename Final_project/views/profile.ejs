@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page with User Profile</title>
+    
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        header {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+        }
+
+        section {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        p {
+            color: #555;
+        }
+
+        hr {
+            border: 1px solid #ccc;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+
+</head>
+<body>
+
+    <header>
+        <h1>Welcome to the Home Page, <%= user.firstName %> <%= user.lastName %>!</h1>
+    </header>
+
+    <section>
+	    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="/">Black Lion Store</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#about-us" data-bs-target="#about-us">About Us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#contact-us" data-bs-target="#contact-us">Contact Us</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#products" data-bs-target="#products">Products</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#register">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#login">Login</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#cart"data-bs-target="#cart">Cart</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container mt-5">
+    <!-- The rest of your content goes here -->
+
+<!-- Welcome Section with Mobile Image -->
+    <div id="home" class="jumbotron bg-light">
+        <div class="row">
+            <div class="col-md-6">
+                <h1 class="display-4">Welcome to Black Lion Store</h1>
+                <p class="lead">Explore our latest products and enjoy a seamless shopping experience.</p>
+            </div>
+            <div class="col-md-6">
+                <img src="image/mobile-image.jpg" alt="Mobile" class="img-fluid">
+            </div>
+        </div>
+    </div>
+    <!-- End of Welcome Section -->
+
+    <!-- Product List Section -->
+    <div id="products" class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h2><i class="fas fa-box"></i> Our Products</h2>
+        </div>
+        <ul class="list-group list-group-flush">
+            <% products.forEach(product => { %>
+                <li class="list-group-item">
+                    <strong>Product ID:</strong> <%= product.product_id %> |
+                    <strong>Product Name:</strong> <%= product.product_name %> |
+                    <strong>Price:</strong> <%= product.price %>
+                </li>
+            <% }); %>
+        </ul>
+    </div>
+    <!-- End of Product List Section -->
+
+    <!-- Cart Section -->
+    <div id="cart" class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
+        </div>
+        <div class="card-body">
+            <!-- Display cart items and total -->
+            <!-- ... -->
+        </div>
+    </div>
+    <!-- End of Cart Section -->
+
+    <!-- About Us Section -->
+    <div id="about-us" class="card mb-4">
+        <div class="card-header bg-info text-white">
+            <h2><i class="fas fa-info-circle"></i> About Us</h2>
+        </div>
+        <div class="card-body">
+            <p class="card-text">Learn more about our company and mission.</p>
+            <a href="/about-us" class="btn btn-info">Read More</a>
+        </div>
+
+	 <!-- End of About Us Section -->
+
+    <!-- Contact Us Section -->
+    <div id="contact-us" class="card mb-4">
+        <div class="card-header bg-warning">
+            <h2><i class="fas fa-envelope"></i> Contact Us</h2>
+        </div>
+        <div class="card-body">
+            <!-- Contact form or information -->
+            <!-- ... -->
+        </div>
+    </div>
+    <!-- End of Contact Us Section -->
+
+        <hr>
+
+        <!-- Display user profile information -->
+        <h2>User Profile</h2>
+        <p><strong>Email:</strong> <%= user.email %></p>
+        <p><strong>Address:</strong> <%= user.address %></p>
+        <p><strong>Phone Number:</strong> <%= user.phoneNumber %></p>
+
+        <!-- Add more details or sections as needed -->
+
+    </section>
+
+    <!-- Add any additional sections or content here -->
+
+    <footer>
+        <p>&copy; 2023 Your Website</p>
+    </footer>
+
+    <!-- Add any additional scripts or script references here -->
+
+</body>
+</html>
+

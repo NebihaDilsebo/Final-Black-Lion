@@ -32,10 +32,10 @@
                 <a class="nav-link" href="#products" data-bs-target="#products">Products</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/register">Register</a>
+                <a class="nav-link" href="#register">Register</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="/login">Login</a>
+                <a class="nav-link" href="#login">Login</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="#cart"data-bs-target="#cart">Cart</a>
@@ -48,38 +48,39 @@
     <!-- The rest of your content goes here -->
 
 <!-- Welcome Section with Mobile Image -->
-    <div class="jumbotron bg-light">
+    <div id="home" class="jumbotron bg-light">
         <div class="row">
             <div class="col-md-6">
                 <h1 class="display-4">Welcome to Black Lion Store</h1>
                 <p class="lead">Explore our latest products and enjoy a seamless shopping experience.</p>
             </div>
             <div class="col-md-6">
-                <img src="image/mobile-image.jpg" alt="Mobile" class="img-fluid">
+                <img src="image/apple-store-2.jpg" alt="Mobile" class="img-fluid">
             </div>
         </div>
     </div>
     <!-- End of Welcome Section -->
 
-    <!-- Product List Section -->
-    <div class="card mb-4">
-        <div class="card-header bg-primary text-white">
-            <h2><i class="fas fa-box"></i> Our Products</h2>
-        </div>
-        <ul class="list-group list-group-flush">
-            <% products.forEach(product => { %>
-                <li class="list-group-item">
-                    <strong>Product ID:</strong> <%= product.product_id %> |
-                    <strong>Product Name:</strong> <%= product.product_name %> |
-                    <strong>Price:</strong> <%= product.price %>
-                </li>
-            <% }); %>
-        </ul>
+<!-- Product List Section -->
+<div id="products" class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h2><i class="fas fa-box"></i> Our Products</h2>
     </div>
-    <!-- End of Product List Section -->
+    <ul>
+        <% products.forEach(product => { %>
+            <li>
+                <h3><%= product.name %></h3>
+                <p>Price: <%= product.price %></p>
+                <!-- Set a maximum width and height for the image -->
+                <img src="<%= product.image %>" alt="<%= product.name %> Image" style="max-width: 100%; max-height: 200px;">
+            </li>
+        <% }); %>
+    </ul>
+</div>
+<!-- End of Product List Section -->
 
     <!-- Cart Section -->
-    <div class="card mb-4">
+    <div id="cart" class="card mb-4">
         <div class="card-header bg-success text-white">
             <h2><i class="fas fa-shopping-cart"></i> Your Cart</h2>
         </div>
@@ -91,7 +92,7 @@
     <!-- End of Cart Section -->
 
     <!-- About Us Section -->
-    <div class="card mb-4">
+    <div id="about-us" class="card mb-4">
         <div class="card-header bg-info text-white">
             <h2><i class="fas fa-info-circle"></i> About Us</h2>
         </div>
@@ -103,7 +104,7 @@
     <!-- End of About Us Section -->
 
     <!-- Contact Us Section -->
-    <div class="card mb-4">
+    <div id="contact-us" class="card mb-4">
         <div class="card-header bg-warning">
             <h2><i class="fas fa-envelope"></i> Contact Us</h2>
         </div>
@@ -115,7 +116,7 @@
     <!-- End of Contact Us Section -->
 
     <!-- Links to Registration and Login Pages -->
-    <div class="row">
+    <div id="register" class="row">
         <div class="col-md-6">
             <div class="card bg-light mb-3">
                 <div class="card-body">
@@ -124,7 +125,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div id="login" class="col-md-6">
             <div class="card bg-light mb-3">
                 <div class="card-body">
                     <h2 class="card-title"><i class="fas fa-sign-in-alt"></i> Login</h2>
@@ -155,6 +156,10 @@
     });
 </script>
 
+<!-- Add Bootstrap JS and Popper.js scripts at the end -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
 </body>
