@@ -1,0 +1,54 @@
+<!-- products.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Products</title>
+  <style>
+    ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px; /* Adjust the gap between products */
+    }
+
+    li {
+      flex: 0 0 calc(20% - 20px); /* Each item takes up 20% of the container width with a gap of 20px */
+      box-sizing: border-box;
+      margin: 0;
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <h1>Products</h1>
+
+  <ul>
+    <% products.forEach(product => { %>
+      <li>
+        <h3><%= product.name %></h3>
+        <p>Price: <%= product.price %></p>
+        <img src="<%= product.image %>" alt="<%= product.name %> Image">
+      </li>
+    <% }); %>
+  </ul>
+
+  <div class="pagination">
+    <% if (currentPage > 1) { %>
+      <a href="/products?page=<%= currentPage - 1 %>">Previous</a>
+    <% } %>
+
+    <% for (let i = 1; i <= totalPages; i++) { %>
+      <a href="/products?page=<%= i %>" <%= i === currentPage ? 'class="active"' : '' %>><%= i %></a>
+    <% } %>
+
+    <% if (currentPage < totalPages) { %>
+      <a href="/products?page=<%= currentPage + 1 %>">Next</a>
+    <% } %>
+  </div>
+
+</body>
+</html>

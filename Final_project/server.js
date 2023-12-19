@@ -37,26 +37,34 @@ const productSchema = new mongoose.Schema({
 const Product = mongoose.model('Product', productSchema);
 
 app.get('/', async (req, res) => {
-    const db = getClient().db('Black_lion_store');
-    const collection = db.collection('products');
+  const db = getClient().db('Black_lion_store');
+  const collection = db.collection('products');
 
-    try {
-        const products = await collection.find().toArray();
-        // Render the 'index' view and pass the products as a variable
-	    res.render('index', { products, popperVersion: '2.11.6' });
-    } catch (error) {
-        console.error('Error fetching products from MongoDB:', error);
-        res.status(500).send('Internal Server Error');
-    }
+  const itemsPerPage = 5; // Adjust this based on your preference
+  const currentPage = parseInt(req.query.page) || 1;
+
+  try {
+    const totalProducts = await collection.countDocuments();
+    const totalPages = Math.ceil(totalProducts / itemsPerPage);
+
+    const products = await collection
+      .find()
+      .skip((currentPage - 1) * itemsPerPage)
+      .limit(itemsPerPage)
+      .toArray();
+
+    res.render('index', {
+      products,
+      currentPage,
+      totalPages,
+      popperVersion: '2.11.6',
+    });
+  } catch (error) {
+    console.error('Error fetching products from MongoDB:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
-app.get('/', (req, res) => {
-  // Retrieve image data from MongoDB (replace this with your own MongoDB logic)
-  const imageData = retrieveImageDataFromMongoDB();
-
-  // Render the HTML page and pass image data
-  res.render('welcome', { imageData });
-});
 
 // Create a register page (GET request)
 app.get('/register', (req, res) => {
@@ -179,12 +187,23 @@ app.post('/admin/add-product', async (req, res) => {
     // Save the product with the image URL
     await productsCollection.insertOne({ name, price, image });
 
-    res.redirect('/'); // Redirect to the home page or product listing page
+	  // Calculate the total number of products after adding the new one
+    const totalProducts = await productsCollection.countDocuments();
+
+    // Calculate the total number of pages after adding the new product
+    const totalPages = Math.ceil(totalProducts / itemsPerPage);
+
+    // Redirect to the page that now contains the new product
+    res.redirect(`/products?page=${totalPages}`);
+
   } catch (error) {
     console.error('Error adding product:', error);
     res.status(500).send('Internal Server Error');
   }
 });
+
+// Define itemsPerPage globally
+const itemsPerPage = 5;
 
 	app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

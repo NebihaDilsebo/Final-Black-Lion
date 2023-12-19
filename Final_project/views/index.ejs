@@ -66,16 +66,33 @@
     <div class="card-header bg-primary text-white">
         <h2><i class="fas fa-box"></i> Our Products</h2>
     </div>
-    <ul>
-        <% products.forEach(product => { %>
-            <li>
+    <div class="product-list">
+        <% products.forEach((product, index) => { %>
+            <div class="product-item">
                 <h3><%= product.name %></h3>
                 <p>Price: <%= product.price %></p>
                 <!-- Set a maximum width and height for the image -->
                 <img src="<%= product.image %>" alt="<%= product.name %> Image" style="max-width: 100%; max-height: 200px;">
-            </li>
+            </div>
+            <% if ((index + 1) % 5 === 0 && index + 1 !== products.length) { %>
+                </div>
+                <div class="product-list">
+            <% } %>
         <% }); %>
-    </ul>
+    </div>
+    <div class="pagination">
+        <% if (currentPage > 1) { %>
+            <a href="/products?page=<%= currentPage - 1 %>">Previous</a>
+        <% } %>
+
+        <% for (let i = 1; i <= totalPages; i++) { %>
+            <a href="/products?page=<%= i %>" <%= i === currentPage ? 'class="active"' : '' %>><%= i %></a>
+        <% } %>
+
+        <% if (currentPage < totalPages) { %>
+            <a href="/products?page=<%= currentPage + 1 %>">Next</a>
+        <% } %>
+    </div>
 </div>
 <!-- End of Product List Section -->
 
